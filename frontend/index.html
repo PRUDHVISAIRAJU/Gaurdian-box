@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>GuardianBox</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial;
+    background:linear-gradient(135deg,#0f172a,#020617);
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+}
+
+.card{
+    width:520px;
+    padding:30px;
+    background:rgba(255,255,255,0.06);
+    border-radius:18px;
+    text-align:center;
+}
+
+input,button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border-radius:10px;
+    border:none;
+}
+
+button{
+    background:#38bdf8;
+    color:white;
+    cursor:pointer;
+}
+
+#result,#output{
+    margin-top:15px;
+    word-break:break-all;
+    font-size:14px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>🔐 GuardianBox</h2>
+
+<h4>Upload File</h4>
+
+<input type="file" id="file">
+<input type="password" id="password" placeholder="Password">
+
+<button onclick="upload()">Upload</button>
+
+<div id="result"></div>
+
+<hr>
+
+<h4>Decrypt File</h4>
+
+<input type="text" id="fileId" placeholder="File ID">
+<input type="password" id="decPass" placeholder="Password">
+
+<button onclick="decrypt()">Decrypt & Download</button>
+
+<pre id="output"></pre>
+
+</div>
+
+<script>
+
+let lastFileName = "";
+
+/* UPLOAD */
+async function upload(){
+
+    const file = document.getElementById("file").files[0];
+    const password = document.getElementById("password").value;
+
+    if(!file){
+        alert("Select file first");
+        return;
+    }
+
+    const form = new FormData();
+    form.append("file", file);
+    form.append("password", password);
+
+    const res = await fetch("http://localhost:5000/upload", {
+        method:"POST",
+        body:form
+    });
+
+    const data = await res.json();
+
+    if(data.error){
+        document.getElementById("result").innerText = data.error;
+        return;
+    }
+
+    lastFileName = data.filename;
+
+    document.getElementById("result").innerText =
+    "File ID: " + data.id + "\nFile: " + data.filename;
+}
+
+
+/* DECRYPT */
+async function decrypt(){
+
+    const id = document.getElementById("fileId").value;
+    const password = document.getElementById("decPass").value;
+
+    const res = await fetch("http://localhost:5000/decrypt", {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({ id, password })
+    });
+
+    const data = await res.json();
+
+    if(data.error){
+        document.getElementById("output").innerText = data.error;
+        return;
+    }
+
+    const bytes = atob(data.data);
+    const arr = new Uint8Array([...bytes].map(c => c.charCodeAt(0)));
+
+    const blob = new Blob([arr]);
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+
+    // 🔥 restore original filename
+    a.download = data.filename;
+
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    URL.revokeObjectURL(url);
+
+    document.getElementById("output").innerText =
+    "Downloaded ✔ as " + data.filename;
+}
+
+</script>
+
+</body>
+</html>
