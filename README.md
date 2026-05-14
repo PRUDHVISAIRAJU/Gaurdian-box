@@ -61,14 +61,14 @@ node server.js
 
 ## Screenshots
 
-### Homepage
-![Homepage](./homepage.png)
+### Home Page
+![Home Page](screenshots/Homepage.png)
 
-### Encrypt & Upload Page
-![Encrypt Upload](./encrypt-upload-page.png)
+### Encrypted Upload
+![Upload Page](screenshots/encrypt&upload-page.png)
 
-### Uploaded
-![Uploaded](./uploaded.png)
+### Upload Page
+![Encrypted Upload](screenshots/uploaded.png)
 
-### Decrypted & Downloaded
-![Decrypted Downloaded](./decrypted-downloaded.png)
+### 4. Decrypt & Download
+![Decrypt & Download](./screenshots/Decrypted%20%26%20Downloaded.png)
