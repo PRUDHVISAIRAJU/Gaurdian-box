@@ -57,18 +57,3 @@ GuardianBox is a secure file sharing system where files are **encrypted before s
 cd backend
 node server.js
 
-```
-
-## Screenshots
-
-### Home Page
-![Home Page](guardian%20box%20screen%20shots/Homepage.png)
-
-### Upload Page
-![Upload Page](guardian%20box%20screen%20shots/upload-.png)
-
-### Encrypted & Uploaded
-![Encrypted & Uploaded](guardian%20box%20screen%20shots/Encrypted%20&%20Uploaded.png)
-
-### Decrypted & Downloaded
-![Decrypted & Downloaded](guardian%20box%20screen%20shots/Decrypted%20&%20Downloaded.png)
